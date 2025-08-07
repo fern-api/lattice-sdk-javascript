@@ -1,6 +1,8 @@
-# Lattice SDK TypeScript Library
+# Anduril TypeScript Library
 
 ![](https://www.anduril.com/lattice-sdk/)
+
+[![npm shield](https://img.shields.io/npm/v/@anduril-industries/lattice-sdk)](https://www.npmjs.com/package/@anduril-industries/lattice-sdk)
 
 The Lattice SDK TypeScript library provides convenient access to the Lattice API from TypeScript.
 
@@ -534,6 +536,18 @@ while (page.hasNextPage()) {
 
 ## Advanced
 
+### Additional Headers
+
+If you would like to send additional headers as part of the request, use the `headers` request option.
+
+```typescript
+const response = await client.entities.longPollEntityEvents(..., {
+    headers: {
+        'X-Custom-Header': 'custom value'
+    }
+});
+```
+
 ### Retries
 
 The SDK is instrumented with automatic retries with exponential backoff. A request will be retried as long
@@ -551,6 +565,16 @@ Use the `maxRetries` request option to configure this behavior.
 ```typescript
 const response = await client.entities.longPollEntityEvents(..., {
     maxRetries: 0 // override maxRetries at the request level
+});
+```
+
+### Timeouts
+
+The SDK defaults to a 60 second timeout. Use the `timeoutInSeconds` option to configure this behavior.
+
+```typescript
+const response = await client.entities.longPollEntityEvents(..., {
+    timeoutInSeconds: 30 // override timeout to 30s
 });
 ```
 
