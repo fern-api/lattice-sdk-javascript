@@ -45,9 +45,8 @@ export class LatticeClient {
             headers: mergeHeaders(
                 {
                     "X-Fern-Language": "JavaScript",
-                    "X-Fern-SDK-Name": "@anduril-industries/lattice-sdk",
-                    "X-Fern-SDK-Version": "2.3.0",
-                    "User-Agent": "@anduril-industries/lattice-sdk/2.3.0",
+                    "X-Fern-SDK-Name": "",
+                    "X-Fern-SDK-Version": "0.0.1",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
