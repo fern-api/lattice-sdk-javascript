@@ -2,7 +2,7 @@
 
 ![](https://www.anduril.com/lattice-sdk/)
 
-[![npm shield](https://img.shields.io/npm/v/@anduril-industries/lattice-sdk)](https://www.npmjs.com/package/@anduril-industries/lattice-sdk)
+[![npm shield](https://img.shields.io/npm/v/)](https://www.npmjs.com/package/)
 
 The Lattice SDK TypeScript library provides convenient access to the Lattice SDK APIs from TypeScript.
 
@@ -10,32 +10,22 @@ The Lattice SDK TypeScript library provides convenient access to the Lattice SDK
 
 API reference documentation is available [here](https://developer.anduril.com/).
 
-## Requirements
-
-To use the SDK please ensure you have the following installed:
-
-- [NodeJS](https://nodejs.org/en/download/package-manager)
-
 ## Installation
 
 ```sh
-npm i -s @anduril-industries/lattice-sdk
+npm i -s
 ```
-
-## Support
-
-For support with this library, please reach out to your Anduril representative.
 
 ## Reference
 
-A full reference for this library is available [here](https://github.com/anduril/lattice-sdk-javascript/blob/HEAD/./reference.md).
+A full reference for this library is available [here](./reference.md).
 
 ## Usage
 
 Instantiate and use the client with the following:
 
 ```typescript
-import { LatticeClient } from "@anduril-industries/lattice-sdk";
+import { LatticeClient } from "";
 
 const client = new LatticeClient({ token: "YOUR_TOKEN" });
 await client.entities.longPollEntityEvents({
@@ -49,7 +39,7 @@ The SDK exports all request and response types as TypeScript interfaces. Simply 
 following namespace:
 
 ```typescript
-import { Lattice } from "@anduril-industries/lattice-sdk";
+import { Lattice } from "Lattice";
 
 const request: Lattice.EntityOverride = {
     ...
@@ -62,7 +52,7 @@ When the API returns a non-success status code (4xx or 5xx response), a subclass
 will be thrown.
 
 ```typescript
-import { LatticeError } from "@anduril-industries/lattice-sdk";
+import { LatticeError } from "Lattice";
 
 try {
     await client.entities.longPollEntityEvents(...);
@@ -519,7 +509,7 @@ const text = new TextDecoder().decode(bytes);
 List endpoints are paginated. The SDK provides an iterator so that you can simply loop over the items:
 
 ```typescript
-import { LatticeClient } from "@anduril-industries/lattice-sdk";
+import { LatticeClient } from "";
 
 const client = new LatticeClient({ token: "YOUR_TOKEN" });
 const response = await client.objects.listObjects({
@@ -641,7 +631,7 @@ The SDK provides a way for you to customize the underlying HTTP client / Fetch f
 unsupported environment, this provides a way for you to break glass and ensure the SDK works.
 
 ```typescript
-import { LatticeClient } from "@anduril-industries/lattice-sdk";
+import { LatticeClient } from "Lattice";
 
 const client = new LatticeClient({
     ...
