@@ -28,7 +28,7 @@ For support with this library, please reach out to your Anduril representative.
 
 ## Reference
 
-A full reference for this library is available [here](https://github.com/anduril/lattice-sdk-javascript/blob/HEAD/./reference.md).
+A full reference for this library is available [here](https://github.com/fern-api/lattice-sdk-javascript/blob/HEAD/./reference.md).
 
 ## Usage
 
