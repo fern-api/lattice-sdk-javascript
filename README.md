@@ -10,25 +10,15 @@ The Lattice SDK TypeScript library provides convenient access to the Lattice SDK
 
 API reference documentation is available [here](https://developer.anduril.com/).
 
-## Requirements
-
-To use the SDK please ensure you have the following installed:
-
-- [NodeJS](https://nodejs.org/en/download/package-manager)
-
 ## Installation
 
 ```sh
 npm i -s @anduril-industries/lattice-sdk
 ```
 
-## Support
-
-For support with this library, please reach out to your Anduril representative.
-
 ## Reference
 
-A full reference for this library is available [here](https://github.com/anduril/lattice-sdk-javascript/blob/HEAD/./reference.md).
+A full reference for this library is available [here](./reference.md).
 
 ## Usage
 
