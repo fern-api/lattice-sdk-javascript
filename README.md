@@ -2,7 +2,7 @@
 
 ![](https://www.anduril.com/lattice-sdk/)
 
-[![npm shield](https://img.shields.io/npm/v/@anduril-industries/lattice-sdk)](https://www.npmjs.com/package/@anduril-industries/lattice-sdk)
+[![npm shield](https://img.shields.io/npm/v/)](https://www.npmjs.com/package/)
 
 The Lattice SDK TypeScript library provides convenient access to the Lattice SDK APIs from TypeScript.
 
@@ -10,36 +10,26 @@ The Lattice SDK TypeScript library provides convenient access to the Lattice SDK
 
 API reference documentation is available [here](https://developer.anduril.com/).
 
-## Requirements
-
-To use the SDK please ensure you have the following installed:
-
-- [NodeJS](https://nodejs.org/en/download/package-manager)
-
 ## Installation
 
 ```sh
-npm i -s @anduril-industries/lattice-sdk
+npm i -s 
 ```
-
-## Support
-
-For support with this library, please reach out to your Anduril representative.
 
 ## Reference
 
-A full reference for this library is available [here](https://github.com/anduril/lattice-sdk-javascript/blob/HEAD/./reference.md).
+A full reference for this library is available [here](./reference.md).
 
 ## Usage
 
 Instantiate and use the client with the following:
 
 ```typescript
-import { LatticeClient } from "@anduril-industries/lattice-sdk";
+import { LatticeClient } from "";
 
 const client = new LatticeClient({ token: "YOUR_TOKEN" });
 await client.entities.longPollEntityEvents({
-    sessionToken: "sessionToken",
+    sessionToken: "sessionToken"
 });
 ```
 
@@ -49,7 +39,7 @@ The SDK exports all request and response types as TypeScript interfaces. Simply 
 following namespace:
 
 ```typescript
-import { Lattice } from "@anduril-industries/lattice-sdk";
+import { Lattice } from "Lattice";
 
 const request: Lattice.EntityOverride = {
     ...
@@ -62,7 +52,7 @@ When the API returns a non-success status code (4xx or 5xx response), a subclass
 will be thrown.
 
 ```typescript
-import { LatticeError } from "@anduril-industries/lattice-sdk";
+import { LatticeError } from "Lattice";
 
 try {
     await client.entities.longPollEntityEvents(...);
@@ -91,38 +81,35 @@ await client.objects.uploadObject(new File(['binary data'], 'file.mp3'), ...);
 await client.objects.uploadObject(new ArrayBuffer(8), ...);
 await client.objects.uploadObject(new Uint8Array([0, 1, 2]), ...);
 ```
-
 The client accepts a variety of types for file upload parameters:
-
-- Stream types: `fs.ReadStream`, `stream.Readable`, and `ReadableStream`
-- Buffered types: `Buffer`, `Blob`, `File`, `ArrayBuffer`, `ArrayBufferView`, and `Uint8Array`
+* Stream types: `fs.ReadStream`, `stream.Readable`, and `ReadableStream`
+* Buffered types: `Buffer`, `Blob`, `File`, `ArrayBuffer`, `ArrayBufferView`, and `Uint8Array`
 
 ### Metadata
 
 You can configure metadata when uploading a file:
-
 ```typescript
 const file: Uploadable.WithMetadata = {
     data: createReadStream("path/to/file"),
-    filename: "my-file", // optional
+    filename: "my-file",       // optional
     contentType: "audio/mpeg", // optional
-    contentLength: 1949, // optional
+    contentLength: 1949,       // optional
 };
 ```
 
 Alternatively, you can upload a file directly from a file path:
-
 ```typescript
-const file: Uploadable.FromPath = {
+const file : Uploadable.FromPath = {
     path: "path/to/file",
-    filename: "my-file", // optional
-    contentType: "audio/mpeg", // optional
-    contentLength: 1949, // optional
+    filename: "my-file",        // optional
+    contentType: "audio/mpeg",  // optional
+    contentLength: 1949,        // optional
 };
 ```
 
 The metadata is used to set the `Content-Length`, `Content-Type`, and `Content-Disposition` headers. If not provided, the client will attempt to determine them automatically.
 For example, `fs.ReadStream` has a `path` property which the SDK uses to retrieve the file size from the filesystem without loading it into memory.
+
 
 ## Binary Response
 
@@ -138,7 +125,6 @@ const stream: ReadableStream<Uint8Array> = response.stream();
 // If you want to check if the response body has been used, you can use the following property.
 const bodyUsed = response.bodyUsed;
 ```
-
 <details>
 <summary>Save binary response to a file</summary>
 
@@ -519,14 +505,14 @@ const text = new TextDecoder().decode(bytes);
 List endpoints are paginated. The SDK provides an iterator so that you can simply loop over the items:
 
 ```typescript
-import { LatticeClient } from "@anduril-industries/lattice-sdk";
+import { LatticeClient } from "";
 
 const client = new LatticeClient({ token: "YOUR_TOKEN" });
 const response = await client.objects.listObjects({
     prefix: "prefix",
     sinceTimestamp: "2024-01-15T09:30:00Z",
     pageToken: "pageToken",
-    allObjectsInMesh: true,
+    allObjectsInMesh: true
 });
 for await (const item of response) {
     console.log(item);
@@ -537,7 +523,7 @@ let page = await client.objects.listObjects({
     prefix: "prefix",
     sinceTimestamp: "2024-01-15T09:30:00Z",
     pageToken: "pageToken",
-    allObjectsInMesh: true,
+    allObjectsInMesh: true
 });
 while (page.hasNextPage()) {
     page = page.getNextPage();
@@ -626,7 +612,10 @@ console.log(rawResponse.headers['X-My-Header']);
 
 ### Runtime Compatibility
 
+
 The SDK works in the following runtimes:
+
+
 
 - Node.js 18+
 - Vercel
@@ -641,7 +630,7 @@ The SDK provides a way for you to customize the underlying HTTP client / Fetch f
 unsupported environment, this provides a way for you to break glass and ensure the SDK works.
 
 ```typescript
-import { LatticeClient } from "@anduril-industries/lattice-sdk";
+import { LatticeClient } from "Lattice";
 
 const client = new LatticeClient({
     ...
