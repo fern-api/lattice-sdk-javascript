@@ -28,7 +28,7 @@ For support with this library, please reach out to your Anduril representative.
 
 ## Reference
 
-A full reference for this library is available [here](https://github.com/anduril/lattice-sdk-javascript/blob/HEAD/./reference.md).
+A full reference for this library is available [here](https://github.com/fern-api/lattice-sdk-javascript/blob/HEAD/./reference.md).
 
 ## Usage
 
@@ -73,6 +73,21 @@ try {
         console.log(err.body);
         console.log(err.rawResponse);
     }
+}
+```
+
+## Streaming Response
+
+Some endpoints return streaming responses instead of returning the full response at once.
+The SDK uses async iterators, so you can consume the responses using a `for await...of` loop.
+
+```typescript
+import { LatticeClient } from "@anduril-industries/lattice-sdk";
+
+const client = new LatticeClient({ token: "YOUR_TOKEN" });
+const response = await client.entities.streamEntities();
+for await (const item of response) {
+    console.log(item);
 }
 ```
 
@@ -518,13 +533,13 @@ List endpoints are paginated. The SDK provides an iterator so that you can simpl
 import { LatticeClient } from "@anduril-industries/lattice-sdk";
 
 const client = new LatticeClient({ token: "YOUR_TOKEN" });
-const response = await client.objects.listObjects({
+const pageableResponse = await client.objects.listObjects({
     prefix: "prefix",
     sinceTimestamp: "2024-01-15T09:30:00Z",
     pageToken: "pageToken",
     allObjectsInMesh: true
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -538,6 +553,9 @@ let page = await client.objects.listObjects({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 ## Advanced
