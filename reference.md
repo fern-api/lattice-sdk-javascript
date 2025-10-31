@@ -727,7 +727,7 @@ await client.tasks.listenAsAgent();
 </details>
 
 ## Objects
-<details><summary><code>client.objects.<a href="/src/api/resources/objects/client/Client.ts">listObjects</a>({ ...params }) -> core.Page<Lattice.PathMetadata></code></summary>
+<details><summary><code>client.objects.<a href="/src/api/resources/objects/client/Client.ts">listObjects</a>({ ...params }) -> core.Page<Lattice.PathMetadata, Lattice.ListResponse></code></summary>
 <dl>
 <dd>
 
@@ -754,13 +754,13 @@ Lists objects in your environment. You can define a prefix to list a subset of y
 <dd>
 
 ```typescript
-const response = await client.objects.listObjects({
+const pageableResponse = await client.objects.listObjects({
     prefix: "prefix",
     sinceTimestamp: "2024-01-15T09:30:00Z",
     pageToken: "pageToken",
     allObjectsInMesh: true
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -774,6 +774,9 @@ let page = await client.objects.listObjects({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 
 ```
 </dd>
