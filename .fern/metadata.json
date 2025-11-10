@@ -1,0 +1,8 @@
+{
+    "cliVersion": "0.113.1",
+    "generatorName": "fernapi/fern-typescript-sdk",
+    "generatorVersion": "99.99.99",
+    "generatorConfig": {
+        "namespaceExport": "Lattice"
+    }
+}
