@@ -7,13 +7,17 @@ export interface BaseClientOptions {
     environment?: core.Supplier<environments.LatticeEnvironment | string>;
     /** Specify a custom URL to connect the client to. */
     baseUrl?: core.Supplier<string>;
-    token?: core.Supplier<core.BearerToken | undefined>;
+    latticeBearerToken?: core.Supplier<core.BearerToken | undefined>;
     /** Additional headers to include in requests. */
     headers?: Record<string, string | core.Supplier<string | null | undefined> | null | undefined>;
     /** The default maximum time to wait for a response in seconds. */
     timeoutInSeconds?: number;
     /** The default number of times to retry the request. Defaults to 2. */
     maxRetries?: number;
+    /** Provide a custom fetch implementation. Useful for platforms that don't have a built-in fetch or need a custom implementation. */
+    fetch?: typeof fetch;
+    /** Configure logging for the client. */
+    logging?: core.logging.LogConfig | core.logging.Logger;
 }
 
 export interface BaseRequestOptions {

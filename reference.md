@@ -1,4 +1,70 @@
 # Reference
+## OAuth2
+<details><summary><code>client.oAuth2.<a href="/src/api/resources/oAuth2/client/Client.ts">getToken</a>({ ...params }) -> Lattice.GetTokenResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Exchange authorization code, refresh token, client credentials, or resource owner credentials for an access token
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.oAuth2.getToken({
+    grant_type: "authorization_code"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Lattice.GetTokenRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `OAuth2.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Entities
 <details><summary><code>client.entities.<a href="/src/api/resources/entities/client/Client.ts">publishEntity</a>({ ...params }) -> Lattice.Entity</code></summary>
 <dl>
@@ -727,7 +793,7 @@ await client.tasks.listenAsAgent();
 </details>
 
 ## Objects
-<details><summary><code>client.objects.<a href="/src/api/resources/objects/client/Client.ts">listObjects</a>({ ...params }) -> core.Page<Lattice.PathMetadata></code></summary>
+<details><summary><code>client.objects.<a href="/src/api/resources/objects/client/Client.ts">listObjects</a>({ ...params }) -> core.Page<Lattice.PathMetadata, Lattice.ListResponse></code></summary>
 <dl>
 <dd>
 
@@ -754,13 +820,13 @@ Lists objects in your environment. You can define a prefix to list a subset of y
 <dd>
 
 ```typescript
-const response = await client.objects.listObjects({
+const pageableResponse = await client.objects.listObjects({
     prefix: "prefix",
     sinceTimestamp: "2024-01-15T09:30:00Z",
     pageToken: "pageToken",
     allObjectsInMesh: true
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -774,6 +840,9 @@ let page = await client.objects.listObjects({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 
 ```
 </dd>
