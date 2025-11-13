@@ -552,7 +552,9 @@ describe("Entities", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.entities.getEntity("entityId");
+        const response = await client.entities.getEntity({
+            entityId: "entityId",
+        });
         expect(response).toEqual({
             entityId: "entityId",
             description: "description",
@@ -818,7 +820,9 @@ describe("Entities", () => {
             .build();
 
         await expect(async () => {
-            return await client.entities.getEntity("entityId");
+            return await client.entities.getEntity({
+                entityId: "entityId",
+            });
         }).rejects.toThrow(Lattice.BadRequestError);
     });
 
@@ -836,7 +840,9 @@ describe("Entities", () => {
             .build();
 
         await expect(async () => {
-            return await client.entities.getEntity("entityId");
+            return await client.entities.getEntity({
+                entityId: "entityId",
+            });
         }).rejects.toThrow(Lattice.UnauthorizedError);
     });
 
@@ -854,7 +860,9 @@ describe("Entities", () => {
             .build();
 
         await expect(async () => {
-            return await client.entities.getEntity("entityId");
+            return await client.entities.getEntity({
+                entityId: "entityId",
+            });
         }).rejects.toThrow(Lattice.NotFoundError);
     });
 
@@ -987,7 +995,10 @@ describe("Entities", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.entities.overrideEntity("entityId", "mil_view.disposition");
+        const response = await client.entities.overrideEntity({
+            entityId: "entityId",
+            fieldPath: "mil_view.disposition",
+        });
         expect(response).toEqual({
             entityId: "entityId",
             description: "description",
@@ -1254,7 +1265,10 @@ describe("Entities", () => {
             .build();
 
         await expect(async () => {
-            return await client.entities.overrideEntity("entityId", "fieldPath");
+            return await client.entities.overrideEntity({
+                entityId: "entityId",
+                fieldPath: "fieldPath",
+            });
         }).rejects.toThrow(Lattice.BadRequestError);
     });
 
@@ -1273,7 +1287,10 @@ describe("Entities", () => {
             .build();
 
         await expect(async () => {
-            return await client.entities.overrideEntity("entityId", "fieldPath");
+            return await client.entities.overrideEntity({
+                entityId: "entityId",
+                fieldPath: "fieldPath",
+            });
         }).rejects.toThrow(Lattice.UnauthorizedError);
     });
 
@@ -1292,7 +1309,10 @@ describe("Entities", () => {
             .build();
 
         await expect(async () => {
-            return await client.entities.overrideEntity("entityId", "fieldPath");
+            return await client.entities.overrideEntity({
+                entityId: "entityId",
+                fieldPath: "fieldPath",
+            });
         }).rejects.toThrow(Lattice.NotFoundError);
     });
 
@@ -1424,7 +1444,10 @@ describe("Entities", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.entities.removeEntityOverride("entityId", "mil_view.disposition");
+        const response = await client.entities.removeEntityOverride({
+            entityId: "entityId",
+            fieldPath: "mil_view.disposition",
+        });
         expect(response).toEqual({
             entityId: "entityId",
             description: "description",
@@ -1690,7 +1713,10 @@ describe("Entities", () => {
             .build();
 
         await expect(async () => {
-            return await client.entities.removeEntityOverride("entityId", "fieldPath");
+            return await client.entities.removeEntityOverride({
+                entityId: "entityId",
+                fieldPath: "fieldPath",
+            });
         }).rejects.toThrow(Lattice.BadRequestError);
     });
 
@@ -1708,7 +1734,10 @@ describe("Entities", () => {
             .build();
 
         await expect(async () => {
-            return await client.entities.removeEntityOverride("entityId", "fieldPath");
+            return await client.entities.removeEntityOverride({
+                entityId: "entityId",
+                fieldPath: "fieldPath",
+            });
         }).rejects.toThrow(Lattice.UnauthorizedError);
     });
 
@@ -1726,7 +1755,10 @@ describe("Entities", () => {
             .build();
 
         await expect(async () => {
-            return await client.entities.removeEntityOverride("entityId", "fieldPath");
+            return await client.entities.removeEntityOverride({
+                entityId: "entityId",
+                fieldPath: "fieldPath",
+            });
         }).rejects.toThrow(Lattice.NotFoundError);
     });
 
