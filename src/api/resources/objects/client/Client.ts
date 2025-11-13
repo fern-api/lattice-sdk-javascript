@@ -34,17 +34,12 @@ export class Objects {
      * @throws {@link Lattice.InternalServerError}
      *
      * @example
-     *     await client.objects.listObjects({
-     *         prefix: "prefix",
-     *         sinceTimestamp: "2024-01-15T09:30:00Z",
-     *         pageToken: "pageToken",
-     *         allObjectsInMesh: true
-     *     })
+     *     await client.objects.listObjects()
      */
     public async listObjects(
         request: Lattice.ListObjectsRequest = {},
         requestOptions?: Objects.RequestOptions,
-    ): Promise<core.Page<Lattice.PathMetadata>> {
+    ): Promise<core.Page<Lattice.PathMetadata, Lattice.ListResponse>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (request: Lattice.ListObjectsRequest): Promise<core.WithRawResponse<Lattice.ListResponse>> => {
                 const { prefix, sinceTimestamp, pageToken, allObjectsInMesh } = request;
@@ -79,6 +74,8 @@ export class Objects {
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
+                    logging: this._options.logging,
                 });
                 if (_response.ok) {
                     return { data: _response.body as Lattice.ListResponse, rawResponse: _response.rawResponse };
@@ -120,7 +117,7 @@ export class Objects {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Lattice.ListResponse, Lattice.PathMetadata>({
+        return new core.Page<Lattice.PathMetadata, Lattice.ListResponse>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>
@@ -141,19 +138,17 @@ export class Objects {
      * @throws {@link Lattice.InternalServerError}
      */
     public getObject(
-        objectPath: string,
-        request: Lattice.GetObjectRequest = {},
+        request: Lattice.GetObjectRequest,
         requestOptions?: Objects.RequestOptions,
     ): core.HttpResponsePromise<core.BinaryResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__getObject(objectPath, request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__getObject(request, requestOptions));
     }
 
     private async __getObject(
-        objectPath: string,
-        request: Lattice.GetObjectRequest = {},
+        request: Lattice.GetObjectRequest,
         requestOptions?: Objects.RequestOptions,
     ): Promise<core.WithRawResponse<core.BinaryResponse>> {
-        const { "Accept-Encoding": acceptEncoding, Priority: priority } = request;
+        const { objectPath, "Accept-Encoding": acceptEncoding, Priority: priority } = request;
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({
@@ -177,6 +172,8 @@ export class Objects {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
         });
         if (_response.ok) {
             return { data: _response.body, rawResponse: _response.rawResponse };
@@ -268,6 +265,8 @@ export class Objects {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
         });
         if (_response.ok) {
             return { data: _response.body as Lattice.PathMetadata, rawResponse: _response.rawResponse };
@@ -316,7 +315,7 @@ export class Objects {
     /**
      * Deletes an object from your environment given the objectPath path parameter.
      *
-     * @param {string} objectPath - The path of the object to delete.
+     * @param {Lattice.DeleteObjectRequest} request
      * @param {Objects.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Lattice.BadRequestError}
@@ -325,16 +324,22 @@ export class Objects {
      * @throws {@link Lattice.InternalServerError}
      *
      * @example
-     *     await client.objects.deleteObject("objectPath")
+     *     await client.objects.deleteObject({
+     *         objectPath: "objectPath"
+     *     })
      */
-    public deleteObject(objectPath: string, requestOptions?: Objects.RequestOptions): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__deleteObject(objectPath, requestOptions));
+    public deleteObject(
+        request: Lattice.DeleteObjectRequest,
+        requestOptions?: Objects.RequestOptions,
+    ): core.HttpResponsePromise<void> {
+        return core.HttpResponsePromise.fromPromise(this.__deleteObject(request, requestOptions));
     }
 
     private async __deleteObject(
-        objectPath: string,
+        request: Lattice.DeleteObjectRequest,
         requestOptions?: Objects.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        const { objectPath } = request;
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -353,6 +358,8 @@ export class Objects {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
         });
         if (_response.ok) {
             return { data: undefined, rawResponse: _response.rawResponse };
@@ -399,7 +406,7 @@ export class Objects {
     /**
      * Returns metadata for a specified object path. Use this to fetch metadata such as object size (size_bytes), its expiry time (expiry_time), or its latest update timestamp (last_updated_at).
      *
-     * @param {string} objectPath - The path of the object to query.
+     * @param {Lattice.GetObjectMetadataRequest} request
      * @param {Objects.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Lattice.BadRequestError}
@@ -407,19 +414,22 @@ export class Objects {
      * @throws {@link Lattice.InternalServerError}
      *
      * @example
-     *     await client.objects.getObjectMetadata("objectPath")
+     *     await client.objects.getObjectMetadata({
+     *         objectPath: "objectPath"
+     *     })
      */
     public getObjectMetadata(
-        objectPath: string,
+        request: Lattice.GetObjectMetadataRequest,
         requestOptions?: Objects.RequestOptions,
     ): core.HttpResponsePromise<Headers> {
-        return core.HttpResponsePromise.fromPromise(this.__getObjectMetadata(objectPath, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__getObjectMetadata(request, requestOptions));
     }
 
     private async __getObjectMetadata(
-        objectPath: string,
+        request: Lattice.GetObjectMetadataRequest,
         requestOptions?: Objects.RequestOptions,
     ): Promise<core.WithRawResponse<Headers>> {
+        const { objectPath } = request;
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -438,6 +448,8 @@ export class Objects {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
         });
         if (_response.ok) {
             return { data: _response.rawResponse.headers, rawResponse: _response.rawResponse };
