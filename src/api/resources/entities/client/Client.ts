@@ -73,6 +73,8 @@ export class Entities {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
         });
         if (_response.ok) {
             return { data: _response.body as Lattice.Entity, rawResponse: _response.rawResponse };
@@ -111,7 +113,7 @@ export class Entities {
     }
 
     /**
-     * @param {string} entityId - ID of the entity to return
+     * @param {Lattice.GetEntityRequest} request
      * @param {Entities.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Lattice.BadRequestError}
@@ -119,19 +121,22 @@ export class Entities {
      * @throws {@link Lattice.NotFoundError}
      *
      * @example
-     *     await client.entities.getEntity("entityId")
+     *     await client.entities.getEntity({
+     *         entityId: "entityId"
+     *     })
      */
     public getEntity(
-        entityId: string,
+        request: Lattice.GetEntityRequest,
         requestOptions?: Entities.RequestOptions,
     ): core.HttpResponsePromise<Lattice.Entity> {
-        return core.HttpResponsePromise.fromPromise(this.__getEntity(entityId, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__getEntity(request, requestOptions));
     }
 
     private async __getEntity(
-        entityId: string,
+        request: Lattice.GetEntityRequest,
         requestOptions?: Entities.RequestOptions,
     ): Promise<core.WithRawResponse<Lattice.Entity>> {
+        const { entityId } = request;
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -150,6 +155,8 @@ export class Entities {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
         });
         if (_response.ok) {
             return { data: _response.body as Lattice.Entity, rawResponse: _response.rawResponse };
@@ -198,8 +205,6 @@ export class Entities {
      * Note that overrides are applied in an eventually consistent manner. If multiple overrides are created
      * concurrently for the same field path, the last writer wins.
      *
-     * @param {string} entityId - The unique ID of the entity to override
-     * @param {string} fieldPath - fieldPath to override
      * @param {Lattice.EntityOverride} request
      * @param {Entities.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -208,25 +213,23 @@ export class Entities {
      * @throws {@link Lattice.NotFoundError}
      *
      * @example
-     *     await client.entities.overrideEntity("entityId", "mil_view.disposition")
+     *     await client.entities.overrideEntity({
+     *         entityId: "entityId",
+     *         fieldPath: "mil_view.disposition"
+     *     })
      */
     public overrideEntity(
-        entityId: string,
-        fieldPath: string,
-        request: Lattice.EntityOverride = {},
+        request: Lattice.EntityOverride,
         requestOptions?: Entities.RequestOptions,
     ): core.HttpResponsePromise<Lattice.Entity> {
-        return core.HttpResponsePromise.fromPromise(
-            this.__overrideEntity(entityId, fieldPath, request, requestOptions),
-        );
+        return core.HttpResponsePromise.fromPromise(this.__overrideEntity(request, requestOptions));
     }
 
     private async __overrideEntity(
-        entityId: string,
-        fieldPath: string,
-        request: Lattice.EntityOverride = {},
+        request: Lattice.EntityOverride,
         requestOptions?: Entities.RequestOptions,
     ): Promise<core.WithRawResponse<Lattice.Entity>> {
+        const { entityId, fieldPath, ..._body } = request;
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -244,10 +247,12 @@ export class Entities {
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
-            body: request,
+            body: _body,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
         });
         if (_response.ok) {
             return { data: _response.body as Lattice.Entity, rawResponse: _response.rawResponse };
@@ -292,8 +297,7 @@ export class Entities {
     /**
      * This operation clears the override value from the specified field path on the entity.
      *
-     * @param {string} entityId - The unique ID of the entity to undo an override from.
-     * @param {string} fieldPath - The fieldPath to clear overrides from.
+     * @param {Lattice.RemoveEntityOverrideRequest} request
      * @param {Entities.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Lattice.BadRequestError}
@@ -301,21 +305,23 @@ export class Entities {
      * @throws {@link Lattice.NotFoundError}
      *
      * @example
-     *     await client.entities.removeEntityOverride("entityId", "mil_view.disposition")
+     *     await client.entities.removeEntityOverride({
+     *         entityId: "entityId",
+     *         fieldPath: "mil_view.disposition"
+     *     })
      */
     public removeEntityOverride(
-        entityId: string,
-        fieldPath: string,
+        request: Lattice.RemoveEntityOverrideRequest,
         requestOptions?: Entities.RequestOptions,
     ): core.HttpResponsePromise<Lattice.Entity> {
-        return core.HttpResponsePromise.fromPromise(this.__removeEntityOverride(entityId, fieldPath, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__removeEntityOverride(request, requestOptions));
     }
 
     private async __removeEntityOverride(
-        entityId: string,
-        fieldPath: string,
+        request: Lattice.RemoveEntityOverrideRequest,
         requestOptions?: Entities.RequestOptions,
     ): Promise<core.WithRawResponse<Lattice.Entity>> {
+        const { entityId, fieldPath } = request;
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -334,6 +340,8 @@ export class Entities {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
         });
         if (_response.ok) {
             return { data: _response.body as Lattice.Entity, rawResponse: _response.rawResponse };
@@ -432,6 +440,8 @@ export class Entities {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
         });
         if (_response.ok) {
             return { data: _response.body as Lattice.EntityEventResponse, rawResponse: _response.rawResponse };
@@ -511,6 +521,8 @@ export class Entities {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
         });
         if (_response.ok) {
             return {
