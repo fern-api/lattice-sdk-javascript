@@ -68,6 +68,8 @@ export class Tasks {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
         });
         if (_response.ok) {
             return { data: _response.body as Lattice.Task, rawResponse: _response.rawResponse };
@@ -106,7 +108,7 @@ export class Tasks {
     }
 
     /**
-     * @param {string} taskId - ID of task to return
+     * @param {Lattice.GetTaskRequest} request
      * @param {Tasks.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Lattice.BadRequestError}
@@ -114,16 +116,22 @@ export class Tasks {
      * @throws {@link Lattice.NotFoundError}
      *
      * @example
-     *     await client.tasks.getTask("taskId")
+     *     await client.tasks.getTask({
+     *         taskId: "taskId"
+     *     })
      */
-    public getTask(taskId: string, requestOptions?: Tasks.RequestOptions): core.HttpResponsePromise<Lattice.Task> {
-        return core.HttpResponsePromise.fromPromise(this.__getTask(taskId, requestOptions));
+    public getTask(
+        request: Lattice.GetTaskRequest,
+        requestOptions?: Tasks.RequestOptions,
+    ): core.HttpResponsePromise<Lattice.Task> {
+        return core.HttpResponsePromise.fromPromise(this.__getTask(request, requestOptions));
     }
 
     private async __getTask(
-        taskId: string,
+        request: Lattice.GetTaskRequest,
         requestOptions?: Tasks.RequestOptions,
     ): Promise<core.WithRawResponse<Lattice.Task>> {
+        const { taskId } = request;
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -142,6 +150,8 @@ export class Tasks {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
         });
         if (_response.ok) {
             return { data: _response.body as Lattice.Task, rawResponse: _response.rawResponse };
@@ -184,7 +194,6 @@ export class Tasks {
     /**
      * Update the status of a task.
      *
-     * @param {string} taskId - ID of task to update status of
      * @param {Lattice.TaskStatusUpdate} request
      * @param {Tasks.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -193,21 +202,22 @@ export class Tasks {
      * @throws {@link Lattice.NotFoundError}
      *
      * @example
-     *     await client.tasks.updateTaskStatus("taskId")
+     *     await client.tasks.updateTaskStatus({
+     *         taskId: "taskId"
+     *     })
      */
     public updateTaskStatus(
-        taskId: string,
-        request: Lattice.TaskStatusUpdate = {},
+        request: Lattice.TaskStatusUpdate,
         requestOptions?: Tasks.RequestOptions,
     ): core.HttpResponsePromise<Lattice.Task> {
-        return core.HttpResponsePromise.fromPromise(this.__updateTaskStatus(taskId, request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__updateTaskStatus(request, requestOptions));
     }
 
     private async __updateTaskStatus(
-        taskId: string,
-        request: Lattice.TaskStatusUpdate = {},
+        request: Lattice.TaskStatusUpdate,
         requestOptions?: Tasks.RequestOptions,
     ): Promise<core.WithRawResponse<Lattice.Task>> {
+        const { taskId, ..._body } = request;
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -225,10 +235,12 @@ export class Tasks {
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
-            body: request,
+            body: _body,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
         });
         if (_response.ok) {
             return { data: _response.body as Lattice.Task, rawResponse: _response.rawResponse };
@@ -315,6 +327,8 @@ export class Tasks {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
         });
         if (_response.ok) {
             return { data: _response.body as Lattice.TaskQueryResults, rawResponse: _response.rawResponse };
@@ -400,6 +414,8 @@ export class Tasks {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
         });
         if (_response.ok) {
             return { data: _response.body as Lattice.AgentRequest, rawResponse: _response.rawResponse };
